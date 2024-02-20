@@ -6,7 +6,7 @@
 	"name": "SceneSwitcher",
 	"developer": "Tpdea",
 	"description": "An Alt + Tab System for GD.",
-
+	"repository": "https://github.com/TpdeaX/SceneSwitcher-Geode",
 	"dependencies": [
 		{
 			"id": "geode.custom-keybinds",
