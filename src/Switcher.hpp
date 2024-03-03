@@ -14,7 +14,6 @@ enum SwitchTo {
     kSwitchToMapPacks,
     kSwitchToTheChallenge,
     kSwitchToFeatured,
-    kSwitchToHallOfFame,
     kSwitchToGauntlets,
     kSwitchToLeaderboards,
     kSwitchToSearch,
@@ -29,8 +28,8 @@ enum SwitchTo {
     kSwitchToTheTower,
     kSwitchToLists,
     kSwitchToPaths
-
 };
+
 constexpr const char* SwitchToToString(SwitchTo to);
 
 enum LastLevelType {
@@ -79,6 +78,7 @@ protected:
 
     void snap();
     bool handle(enumKeyCodes);
+    void addSwitchToConfig();
 
     virtual ~Switcher();
 

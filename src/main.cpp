@@ -2,28 +2,43 @@
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include <Geode/modify/EditLevelLayer.hpp>
 #include <Geode/modify/LevelSelectLayer.hpp>
-#include <Geode/modify/CCKeyboardDispatcher.hpp>
+#include <Geode/modify/CCScene.hpp>
 #include "Switcher.hpp"
+#include "Keybinds.hpp"
+#include "CustomSettings.hpp"
 
 using namespace geode::prelude;
 
+$execute{
+	using namespace keybinds;
+
+	BindManager::get()->registerBindable({
+		"open-scene-switcher-key"_spr,
+		"Open S.S",
+		"Key/key combination that opens the Scene Switcher",
+		{ Keybind::create(KEY_CapsLock, Modifier::Control) },
+		Category::GLOBAL
+	});
+}
+
 class $modify(LevelInfoLayer) {
-	void destructor_() {
+	void destructor() {
 		setLastViewedLevel(this->m_level, kLastLevelTypePlay);
-		LevelInfoLayer::destructor_();
+		LevelInfoLayer::~LevelInfoLayer();
 	}
 };
 
 class $modify(EditLevelLayer) {
-	void destructor_() {
+	void destructor() {
 		setLastViewedLevel(this->m_level, kLastLevelTypePlay);
-		EditLevelLayer::destructor_();
+		EditLevelLayer::~EditLevelLayer();
 	}
+
 };
 
 class $modify(LevelSelectLayer) {
-	void destructor_() {
 
+	void destructor() {
 		auto pagSafe = ((from<int>(from<BoomScrollLayer*>(this, 0x150), 0x1cc) % 24 + 24) % 24) + 1;
 
 		setLastViewedLevel(
@@ -32,36 +47,31 @@ class $modify(LevelSelectLayer) {
 			),
 			kLastLevelTypeMain
 		);
-
-
-		LevelSelectLayer::destructor_();
+		LevelSelectLayer::~LevelSelectLayer();
 	}
 };
 
-class $modify(CCKeyboardDispatcher) {
-	bool dispatchKeyboardMSG(enumKeyCodes key, bool down, bool idk) {
-		if (
-			!CCDirector::sharedDirector()->getIsTransitioning() &&
-			key == switchKey()
-			) {
-			if (down) {
-				Switcher::show();
-			}
-			else {
-				Switcher::goTo();
-			}
-			return true;
-		}
-		else {
-			if ((down) && Switcher::handleKey(key))
-				return true;
-		}
+class $modify(CCScene) {
+	static CCScene* create() {
+		auto ret = CCScene::create();
 
-		
+		ret->template addEventListener<keybinds::InvokeBindFilter>([=](keybinds::InvokeBindEvent* event) {
+			if (!CCDirector::sharedDirector()->getIsTransitioning()) {
+				if (event->isDown()) {
+					Switcher::show();
+				}
+				else {
+					Switcher::goTo();
+				}
+			}	
+			return ListenerResult::Propagate;
+		}, "open-scene-switcher-key"_spr);
 
-		return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, idk);
+		return ret;
 	}
+
 };
 
 $on_mod(Loaded) {
+	Mod::get()->addCustomSetting<SettingSectionValue>("title-seccion-layers-selection", "none");
 }

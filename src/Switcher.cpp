@@ -38,7 +38,6 @@ constexpr const char* SwitchToToString(SwitchTo to) {
 	case kSwitchToSearch: return "Search";
 	case kSwitchToTheChallenge: return "The Challenge";
 	case kSwitchToFeatured: return "Featured";
-	case kSwitchToHallOfFame: return "Hall of Fame";
 	case kSwitchToGauntlets: return "Gauntlets";
 	case kSwitchToLeaderboards: return "Leaderboards";
 	case kSwitchToDaily: return "Daily";
@@ -69,7 +68,6 @@ constexpr const char* SwitchToToSprName(SwitchTo to) {
 	case kSwitchToSettings: return "GJ_optionsBtn_001.png";
 	case kSwitchToMoreOptions: return "GJ_optionsBtn02_001.png";
 	case kSwitchToFeatured: return "GJ_featuredBtn_001.png";
-	case kSwitchToHallOfFame: return "GJ_fameBtn_001.png";
 	case kSwitchToGauntlets: return "GJ_gauntletsBtn_001.png";
 	case kSwitchToLeaderboards: return "GJ_highscoreBtn_001.png";
 	case kSwitchToProfile: return "GJ_profileButton_001.png";
@@ -92,9 +90,6 @@ const char* diffToSprName(GJGameLevel* lvl) {
 
 	std::stringstream vgfdx;
 	vgfdx << lvl->m_demon << "\t" << lvl->m_demonDifficulty << "\t" << static_cast<int>(lvl->m_difficulty) << "\t" << static_cast<int>(diff);
-
-	//MessageBoxA(0, vgfdx.str().c_str(), "dgfh", 0);
-
 
 	if (diff == GJDifficulty::Auto) {
 		return "difficulty_auto_btn_001.png";
@@ -397,21 +392,67 @@ bool Switcher::init() {
 	titleLabel->setScale(.4f);
 	this->addChild(titleLabel);
 
-	//auto fileCfg = this->loadConfigFile();
-
-	//if (fileCfg.size()) {
-	//	this->loadConfig(fileCfg);
-	//}
-	//else
-	 if (true){
-		this->loadConfig({
-			{ kSwitchToMainMenu, kSwitchToMyLevels, kSwitchToOnlineLevels, kSwitchToIconKit, kSwitchToGauntlets },
-			{ kSwitchToSearch, kSwitchToSavedLevels, kSwitchToDaily, kSwitchToWeekly, kSwitchToTheTower },
-			{ kSwitchToSettings, kSwitchToProfile, kSwitchToLastLevel, kSwitchToLast, kSwitchToMoreOptions },
-			});
-	}
+	this->addSwitchToConfig();
 
 	return true;
+}
+
+void Switcher::addSwitchToConfig() {
+	std::vector<SwitchTo> row1, row2, row3;
+
+	std::vector<std::string> enabledNamesVariables = {
+		"enabled-mainMenu",
+		"enabled-iconKit",
+		"enabled-officialLevels",
+		"enabled-myLevels",
+		"enabled-onlineLevels",
+		"enabled-savedLevels",
+		"enabled-mapPacks",
+		"enabled-theChallenge",
+		"enabled-featured",
+		"enabled-gauntlets",
+		"enabled-leaderboards",
+		"enabled-search",
+		"enabled-daily",
+		"enabled-weekly",
+		"enabled-last",
+		"enabled-lastLevel",
+		"enabled-settings",
+		"enabled-moreOptions",
+		"enabled-profile",
+		"enabled-quests",
+		"enabled-theTower",
+		"enabled-lists",
+		"enabled-paths"
+	};
+
+	int sum = 0;
+
+	for (size_t i = 0; i < enabledNamesVariables.size(); i++)
+	{
+		if (Mod::get()->getSettingValue<bool>(enabledNamesVariables[i].c_str())) {
+			sum++;
+			switch (sum) {
+			case 1:
+				row1.push_back(static_cast<SwitchTo>(i));
+				break;
+			case 2:
+				row2.push_back(static_cast<SwitchTo>(i));
+				break;
+			case 3:
+				row3.push_back(static_cast<SwitchTo>(i));
+				break;
+			}
+			if (sum == 3) {
+				sum = 0;
+			}
+		}
+	}
+	this->loadConfig({
+			row1,
+			row2,
+			row3,
+		});
 }
 
 void Switcher::visit() {
@@ -536,45 +577,44 @@ void Switcher::go() {
 				auto page = ProfilePage::create(
 					GJAccountManager::sharedState()->m_accountID, true
 				);
-				page->m_noElasticity = true;
+				page->m_noElasticity = !Mod::get()->getSettingValue<bool>("enabled-animation-popup");
 				page->show();
 			} break;
 
 			case kSwitchToSettings: {
-
 				auto pl = OptionsLayer::create();
 				CCDirector::sharedDirector()->getRunningScene()->addChild(
 					pl, CCDirector::sharedDirector()->getRunningScene()->getHighestChildZ()
 				);
-				pl->showLayer(false);
+				pl->showLayer(Mod::get()->getSettingValue<bool>("enabled-animation-popup"));
 			} break;
 
 			case kSwitchToMoreOptions: {
 				auto l = MoreOptionsLayer::create();
-				l->m_noElasticity = true;
+				l->m_noElasticity = !Mod::get()->getSettingValue<bool>("enabled-animation-popup");
 				l->show();
 			} break;
 
 			case kSwitchToDaily: {
 				auto page = DailyLevelPage::create(GJTimedLevelType::Daily);
-				page->m_noElasticity = true;
+				page->m_noElasticity = !Mod::get()->getSettingValue<bool>("enabled-animation-popup");
 				page->show();
 			} break;
 
 			case kSwitchToWeekly: {
 				auto page = DailyLevelPage::create(GJTimedLevelType::Weekly);
-				page->m_noElasticity = true;
+				page->m_noElasticity = !Mod::get()->getSettingValue<bool>("enabled-animation-popup");
 				page->show();
 			} break;
 
 			case kSwitchToQuests: {
 				auto page = ChallengesPage::create();
-				page->m_noElasticity = true;
+				page->m_noElasticity = !Mod::get()->getSettingValue<bool>("enabled-animation-popup");
 				page->show();
 			} break;
 			case kSwitchToPaths: {
 				auto page = GJPathsLayer::create();
-				page->m_noElasticity = true;
+				page->m_noElasticity = !Mod::get()->getSettingValue<bool>("enabled-animation-popup");
 				page->show();
 			} break;
 			}
@@ -601,11 +641,6 @@ void Switcher::go() {
 			case kSwitchToMyLevels:
 				scene->addChild(LevelBrowserLayer::create(GJSearchObject::create(SearchType::MyLevels)));
 				break;
-
-			case kSwitchToHallOfFame:
-				scene->addChild(LevelBrowserLayer::create(GJSearchObject::create(SearchType::HallOfFame)));
-				break;
-
 			case kSwitchToFeatured:
 				scene->addChild(LevelBrowserLayer::create(GJSearchObject::create(SearchType::Featured)));
 				break;

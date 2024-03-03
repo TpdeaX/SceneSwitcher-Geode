@@ -1,7 +1,7 @@
 {
 	"geode": "2.0.0-beta.16",
 	"gd": "2.204",
-	"version": "v1.0.0",
+	"version": "v1.1.0",
 	"id": "tpdea.sceneswitcher",
 	"name": "SceneSwitcher",
 	"developer": "Tpdea",
@@ -78,7 +78,156 @@
 				"slider-step": 5,
 				"arrows": true
 			}
+		},
+		"enabled-animation-popup": {
+			"name": "Enable animation on popup layers",
+			"description": "Option to enable/disable animation effects on popup layers.",
+			"type": "bool",
+			"default": true
+		},
+		"title-seccion-layers-selection": {
+			"name": "Layers Selection",
+			"description": "This part of the settings is for you to choose which layers will be added to the SceneSwitcher.",
+			"type": "custom",
+			"scale": 300,
+			"posX": 80
+		},
+		"enabled-mainMenu": {
+			"name": "Main Menu",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-iconKit": {
+			"name": "Icon Kit",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-officialLevels": {
+			"name": "Official Levels",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-myLevels": {
+			"name": "My Levels",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-onlineLevels": {
+			"name": "Online Levels",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-savedLevels": {
+			"name": "Saved Levels",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-mapPacks": {
+			"name": "Map Packs",
+			"type": "bool",
+			"default": false
+		},
+
+		"enabled-theChallenge": {
+			"name": "The Challenge",
+			"type": "bool",
+			"default": false
+		},
+
+		"enabled-featured": {
+			"name": "Featured",
+			"type": "bool",
+			"default": false
+		},
+		"enabled-gauntlets": {
+			"name": "Gauntlets",
+			"type": "bool",
+			"default": false
+		},
+
+		"enabled-leaderboards": {
+			"name": "Leaderboards",
+			"type": "bool",
+			"default": false
+		},
+
+		"enabled-search": {
+			"name": "Search",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-daily": {
+			"name": "Daily",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-weekly": {
+			"name": "Weekly",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-last": {
+			"name": "Last Scene",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-lastLevel": {
+			"name": "Last Level",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-settings": {
+			"name": "Settings",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-moreOptions": {
+			"name": "More Options",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-profile": {
+			"name": "Profile",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-quests": {
+			"name": "Quests",
+			"type": "bool",
+			"default": false
+		},
+
+		"enabled-theTower": {
+			"name": "The Tower",
+			"type": "bool",
+			"default": true
+		},
+
+		"enabled-lists": {
+			"name": "Lists",
+			"type": "bool",
+			"default": false
+		},
+
+		"enabled-paths": {
+			"name": "Paths",
+			"type": "bool",
+			"default": false
 		}
+
 	}
-	
 }
